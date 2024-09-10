@@ -1,0 +1,26 @@
+<template>
+    <lightning-card variant="Narrow" title="" icon-name="">
+        <div style="Display: flex; justify-content: center; align-items: center; width:100%">
+          
+                <lightning-input style="width: 40%" value={accountId} onchange={handleInputChange}
+                    placeholder="Inserire NDG">
+                </lightning-input>
+
+        </div>
+        <div style="Display: flex; justify-content: center; align-items: center; width:100%;margin-top:10px">
+            <lightning-button style="" class="" label="Scarica PDF" variant="brand" onclick={handleDownload}>
+            </lightning-button>
+        </div>
+    </lightning-card>
+
+
+
+    <div class="spinner">
+        <template if:true={isLoading}>
+            <lightning-spinner class="slds-is-fixed" style="  background-color: rgba(0, 0, 0, 0.10);"
+                alternative-text="Loading" variant="brand" size="large">
+            </lightning-spinner>
+        </template>
+    </div>
+
+</template>
