@@ -1,0 +1,100 @@
+public with sharing class AttestazionePatrimonialePDFController {
+    public list<Attestazione_Patrimoniale__c> attestaPar { get; set; }
+    public list<Attestazione_Patrimoniale__c> Conti_correnti_attivi { get; set; }
+    public list<Attestazione_Patrimoniale__c> Conti_correnti_estinti { get;set; }
+    public list<Attestazione_Patrimoniale__c> Time_deposit_attivi { get;  set; }
+    public list<Attestazione_Patrimoniale__c> Time_deposit_estinti { get;  set; }
+    public list<Attestazione_Patrimoniale__c> Depositi_a_risparmio_attivi { get;  set; }
+    public list<Attestazione_Patrimoniale__c> Depositi_a_risparmio_estinti { get;  set; }
+    public list<Attestazione_Patrimoniale__c> Carta_e_conto_attive { get;  set; }
+    public list<Attestazione_Patrimoniale__c> 	Carta_e_conto_estinte { get;  set; }
+    public list<Attestazione_Patrimoniale__c> Carte_prepagate { get;  set; }
+    public list<Attestazione_Patrimoniale__c> Dossier { get;  set; }
+    public string Name {get;set;}
+    public string DOB{get;set;}
+    public string State {get;set;}
+    public string citizenCode{get;set;}
+    public string Address{get;set;}
+    Public string todaysDate{get;set;}
+    public integer todaysYear{get;set;}
+    public string dosesiName{get;set;}
+    public string incentri{get;set;}
+    public AttestazionePatrimonialePDFController()
+    {
+        String attId = ApexPages.currentPage().getParameters().get('id');
+        
+        if (attId != null) 
+        {
+            attestaPar=new list<Attestazione_Patrimoniale__c>();
+            Conti_correnti_attivi=new list<Attestazione_Patrimoniale__c>();
+            Conti_correnti_estinti =new list<Attestazione_Patrimoniale__c>();
+            Time_deposit_attivi =new list<Attestazione_Patrimoniale__c>();
+            Time_deposit_estinti=new list<Attestazione_Patrimoniale__c>();
+            Depositi_a_risparmio_attivi=new list<Attestazione_Patrimoniale__c>();
+            Depositi_a_risparmio_estinti=new list<Attestazione_Patrimoniale__c>();
+            Carta_e_conto_attive=new list<Attestazione_Patrimoniale__c>();}
+        Carta_e_conto_estinte =new list<Attestazione_Patrimoniale__c>();
+        Carte_prepagate =new list<Attestazione_Patrimoniale__c>();
+        Dossier =new list<Attestazione_Patrimoniale__c>();
+       // date temp=todaysDate
+             todaysDate=system.now().Date().format();
+        todaysYear=system.now().Year();
+        attestaPar = [SELECT Id,NDG_Attestazione__c,ISIN__c,Descrizione_fondo__c,Controvalore_euro__c,Indirizzo_di_residenza__c,Luogo_di_nascita__c,Codice_Fiscale__c,Numero_rapporto__c,Type__c,Data_di_nascita__c,Giacenza_media__c,Data_estinzione__c, Intestatario__c, Saldo_contabile__c FROM Attestazione_Patrimoniale__c WHERE NDG_Attestazione__c = :attId];
+        for(Attestazione_Patrimoniale__c obj:attestaPar)
+        {
+            Name=obj.Intestatario__c;
+            DOB=obj.Data_di_nascita__c.format();
+            citizenCode=obj.Codice_Fiscale__c;
+            state=obj.Luogo_di_nascita__c;
+            Address=obj.Indirizzo_di_residenza__c;
+            
+           
+            if(obj.Type__c=='Conti correnti attivi')
+            {
+                Conti_correnti_attivi.add(obj);
+            }
+            else if(obj.Type__c=='Conti correnti estinti')
+            {
+                Conti_correnti_estinti.add(obj);
+            }
+            else if(obj.Type__c=='Time deposit attivi')
+            {
+                Time_deposit_attivi.add(obj);
+            }
+            else if(obj.Type__c=='Time deposit estinti')
+            {
+                Time_deposit_estinti.add(obj);
+            }
+            else if(obj.Type__c=='Depositi a risparmio attivi')
+            {
+                Depositi_a_risparmio_attivi.add(obj);
+            }
+            else if(obj.Type__c=='Depositi a risparmio estinti')
+            {
+                Depositi_a_risparmio_estinti.add(obj);
+            }
+            else if(obj.Type__c=='Carta e conto attive')
+            {
+                Carta_e_conto_attive.add(obj);
+            }
+            else if(obj.Type__c=='Carta e conto estinte')
+            {
+                Carta_e_conto_estinte.add(obj);
+            }
+            else if(obj.Type__c=='Carte prepagate')
+            {
+                Carte_prepagate.add(obj);
+            }
+            else if(obj.Type__c=='Dossier')
+            {
+                dosesiName=obj.Numero_rapporto__c;
+                incentri=obj.Intestatario__c;
+                Dossier.add(obj);
+            }
+        }
+        
+        //system.debug(attestaPar+'----'+attId);
+        ApexPages.currentPage().getHeaders().put('Content-Disposition', 'attachment; filename="AttestazionePatrimoniale.pdf"');
+        //  return true;
+    }
+}
